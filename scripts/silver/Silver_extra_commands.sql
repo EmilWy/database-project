@@ -13,6 +13,10 @@ SELECT TOP 1000 * from silver.erp_loc_a101;
 
 SELECT TOP 1000 * from silver.erp_px_cat_g1v2;
 
+SELECT COUNT(*) from silver.crm_customer_info;
+SELECT COUNT(*) from silver.erp_cust_az12;
+SELECT COUNT(*) from silver.erp_loc_a101;
+
 SELECT
 	cst_id,
 	count(*)
@@ -83,3 +87,12 @@ WHERE TRIM(cst_key) not in (SELECT TRIM(cid) FROM silver.erp_cust_az12)
 SELECT *
 FROM silver.crm_customer_info
 WHERE cst_key NOT IN (SELECT cid FROM silver.erp_loc_a101)
+
+SELECT *
+FROM silver.crm_customer_info
+WHERE cst_key NOT IN (SELECT cst_key FROM bronze.crm_customer_info)
+
+SELECT cst_key, COUNT(*)
+FROM silver.crm_customer_info
+GROUP BY cst_key
+HAVING COUNT(*) > 1

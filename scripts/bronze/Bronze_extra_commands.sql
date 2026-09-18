@@ -13,6 +13,10 @@ SELECT TOP 1000 * from bronze.erp_loc_a101;
 
 SELECT TOP 1000 * from bronze.erp_px_cat_g1v2;
 
+SELECT COUNT(*) from bronze.crm_customer_info;
+SELECT COUNT(*) from bronze.erp_cust_az12;
+SELECT COUNT(*) from bronze.erp_loc_a101;
+
 -- =======================================================
 
 SELECT
