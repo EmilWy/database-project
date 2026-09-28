@@ -9,9 +9,11 @@ Script Purpose:
 	Use if tables structure needs to be changed
 */
 
+-- if object already exists then drop it (delete table)
 IF OBJECT_ID('bronze.crm_customer_info', 'U') IS NOT NULL
 	DROP TABLE bronze.crm_customer_info;
 
+-- define table
 CREATE TABLE bronze.crm_customer_info (
 	cst_id INT,
 	cst_key NVARCHAR(50),
@@ -22,6 +24,7 @@ CREATE TABLE bronze.crm_customer_info (
 	cst_create_date DATE
 );
 
+-- repeat commands for rest of database files
 IF OBJECT_ID('bronze.crm_pdr_info', 'U') IS NOT NULL
 	DROP TABLE bronze.crm_pdr_info;
 

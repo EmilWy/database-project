@@ -10,9 +10,12 @@ Script Purpose:
 	and full load time. It informs about error occurance via try-catch.
 */
 
+-- create procedure to fill data into the tables
 CREATE OR ALTER PROCEDURE bronze.load_bronze AS
 BEGIN
+	-- use try to catch errors 
 	BEGIN TRY
+		-- declare timestamps to learn for long each insert takes
 		DECLARE @start_time DATETIME, @end_time DATETIME
 		DECLARE @start_time_full DATETIME, @end_time_full DATETIME
 		SET @start_time_full = GETDATE()
@@ -21,19 +24,20 @@ BEGIN
 		PRINT '============================================'
 
 		PRINT 'Truncating table bronze.crm_customer_info'
-		TRUNCATE TABLE bronze.crm_customer_info;
+		TRUNCATE TABLE bronze.crm_customer_info; -- clear data if already there
 		PRINT 'Bulk inserting data into table bronze.crm_customer_info'
 		SET @start_time = GETDATE();
-		BULK INSERT bronze.crm_customer_info 
-			FROM 'C:\Users\emili\source\repos\NewRepo\data\source_crm\cust_info.csv'
+		BULK INSERT bronze.crm_customer_info  -- insert into table
+			FROM 'C:\Users\emili\source\repos\NewRepo\data\source_crm\cust_info.csv' -- source of data
 			WITH (
-				FIRSTROW = 2,
-				FIELDTERMINATOR = ',',
+				FIRSTROW = 2, -- skip headers
+				FIELDTERMINATOR = ',', -- csv separator
 				TABLOCK
 			);
 		SET @end_time = GETDATE();
 		PRINT 'Insert time duration: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds'
 		
+		-- repeat operations for each table
 		PRINT '--------------------------------------------'
 		PRINT 'Truncating table bronze.crm_pdr_info'
 		TRUNCATE TABLE bronze.crm_pdr_info;

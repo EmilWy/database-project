@@ -1,4 +1,7 @@
--- Original
+-- =======================================================
+-----------------------------------
+-- Original view from gold 
+-----------------------------------
 SELECT 
 	ci.cst_id,
 	ci.cst_key,
@@ -16,7 +19,9 @@ LEFT JOIN silver.erp_cust_az12 cd
 LEFT JOIN silver.erp_loc_a101 cl
 	ON ci.cst_key = cl.cid
 
--- double gender columns - unify to coherent last column
+-----------------------------------
+-- double gender columns - correct id using gender from crm or erp
+-----------------------------------
 SELECT DISTINCT
 	ci.cst_gndr,
 	cd.gen,
@@ -30,7 +35,7 @@ LEFT JOIN silver.erp_cust_az12 cd
 LEFT JOIN silver.erp_loc_a101 cl
 	ON ci.cst_key = cl.cid
 
--- correct id crm (whem aviable genders do not match)
+/*
 SELECT 
 	ci.cst_id,
 	ci.cst_key,
@@ -57,8 +62,11 @@ LEFT JOIN silver.erp_cust_az12 cd
 	ON ci.cst_key = cd.cid
 LEFT JOIN silver.erp_loc_a101 cl
 	ON ci.cst_key = cl.cid
+*/
 
--- check for duplikates
+-----------------------------------
+-- check for duplicates in ids
+-----------------------------------
 SELECT  cst_id, COUNT(*)
 FROM(
 SELECT 
@@ -80,13 +88,22 @@ LEFT JOIN silver.erp_loc_a101 cl
 GROUP BY cst_id
 HAVING COUNT(*)>1
 
+-----------------------------------
+-- see whole tables
+-----------------------------------
+
 SELECT * FROM silver.erp_cust_az12
 SELECT * FROM silver.erp_loc_a101
 
+-----------------------------------
+-- see gender duplicates in gold layer
+-----------------------------------
 SELECT DISTINCT gender FROM gold.dim_customers
 
 -- =======================================================
+-----------------------------------
 -- only currently produced products (pri.prd_end_dt IS NULL - no production end time)
+-----------------------------------
 
 SELECT
 	ROW_NUMBER() OVER(ORDER BY pri.prd_id, pri.prd_start_dt) product_key,

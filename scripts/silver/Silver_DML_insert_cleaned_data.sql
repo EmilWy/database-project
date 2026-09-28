@@ -9,9 +9,13 @@ Script Purpose:
 	It informs about execution time for each table, for bottleneck tracebility
 	and full load time. It informs about error occurance via try-catch.
 */
+
+-- create procedure to fill data into the tables
 CREATE OR ALTER PROCEDURE silver.load_silver AS
 BEGIN
+	-- use try to catch errors 
     BEGIN TRY
+		-- declare timestamps to learn for long each insert takes
         DECLARE @start_time DATETIME, @end_time DATETIME
 		DECLARE @start_time_full DATETIME, @end_time_full DATETIME
 		SET @start_time_full = GETDATE()
@@ -20,10 +24,10 @@ BEGIN
 		PRINT '============================================'
 
         PRINT 'Truncating table silver.crm_customer_info'
-        TRUNCATE TABLE silver.crm_customer_info;
+        TRUNCATE TABLE silver.crm_customer_info; -- clear data if already there
         PRINT 'Bulk inserting data into table silver.crm_customer_info'
 		SET @start_time = GETDATE();
-        INSERT INTO silver.crm_customer_info (
+        INSERT INTO silver.crm_customer_info ( -- insert into table
             cst_id,
             cst_key,
             cst_firstname,
@@ -32,7 +36,7 @@ BEGIN
             cst_gndr,
             cst_create_date
         )
-
+        -- what to insert
         SELECT 
             cst_id,
             cst_key,
@@ -54,6 +58,7 @@ BEGIN
         SET @end_time = GETDATE();
 		PRINT 'Insert time duration: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds'
 		
+		-- repeat operations for each table
 		PRINT '--------------------------------------------'
         PRINT 'Truncating table silver.crm_pdr_info'
         TRUNCATE TABLE silver.crm_pdr_info;

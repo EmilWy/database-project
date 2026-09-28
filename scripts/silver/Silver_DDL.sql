@@ -11,9 +11,11 @@ Script Purpose:
 	Modification: to hold split key in prd info
 */
 
+-- if object already exists then drop it (delete table)
 IF OBJECT_ID('silver.crm_customer_info', 'U') IS NOT NULL
 	DROP TABLE silver.crm_customer_info;
-
+	
+-- define table
 CREATE TABLE silver.crm_customer_info (
 	cst_id INT,
 	cst_key NVARCHAR(50),
@@ -22,9 +24,10 @@ CREATE TABLE silver.crm_customer_info (
 	cst_marital_status NVARCHAR(50),
 	cst_gndr NVARCHAR(50),
 	cst_create_date DATE,
-	dwh_create_date DATETIME2 DEFAULT GETDATE()
+	dwh_create_date DATETIME2 DEFAULT GETDATE() -- leave last_updated information
 );
 
+-- repeat commands for rest of database files
 IF OBJECT_ID('silver.crm_pdr_info', 'U') IS NOT NULL
 	DROP TABLE silver.crm_pdr_info;
 
